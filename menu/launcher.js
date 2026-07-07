@@ -9,7 +9,7 @@ function launchGame(gamePath) {
     process.chdir(gamePath);
     process.mainModule.filename = nodePath.resolve(gamePath, 'index.html');
     process.execPath = nodePath.resolve(gamePath, 'nw.exe');
-    //injectFsInterceptor(window, saveDirPath);
+    injectFsInterceptor(window, saveDirPath);
 
     const indexHtmlPath = 'file:///' + nodePath.resolve(gamePath, 'index.html').replace(/\\/g, '/');
     console.log("[启动器] 正在当前窗口直接加载游戏: " + indexHtmlPath);
