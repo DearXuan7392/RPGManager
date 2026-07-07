@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <title>RPG Maker 游戏启动菜单</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div id="global-bg-container">
+        <div id="global-bg-1" class="bg-layer"></div>
+        <div id="global-bg-2" class="bg-layer"></div>
+    </div>
+
+    <h1>RPG Maker 游戏库</h1>
+    <div id="game-list"></div>
+
+    <!--右键菜单开始-->
+    <div id="custom-context-menu" class="context-menu" style="display: none;">
+        <div class="context-menu-item" id="menu-open-folder">打开文件夹</div>
+        <div class="context-menu-item" id="menu-open-save">打开存档</div>
+        <div class="context-menu-item" id="menu-edit-save">编辑存档</div>
+    </div>
+
+    <div id="save-editor-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-window">
+            <div class="modal-header">
+                <h3 id="modal-game-title">游戏存档编辑器</h3>
+                <span class="close-btn" id="close-modal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="save-file-list" id="modal-save-list">
+                </div>
+                <div class="save-edit-form" id="modal-edit-form">
+                    <p style="color: #888;">请在左侧选择要编辑的存档文件...</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="btn-cancel-save">取消</button>
+                <button class="btn btn-primary" id="btn-confirm-save" disabled>保存并覆盖</button>
+            </div>
+        </div>
+    </div>
+    <!--右键菜单结束-->
+
+    <script defer>
+        const nodeFs = require('fs');
+        const nodePath = require('path');
+    </script>
+    <script src="saveEditor.js" defer></script>
+    <script src="menu.js" defer></script>
+    <script src="inject.js" defer></script>
+    <script src="card.js" defer></script>
+    <script src="launcher.js" defer></script>
+</body>
+
+</html>

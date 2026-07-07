@@ -1,0 +1,14 @@
+{
+  "name": "rpg-maker-menu",
+  "version": "1.0.0",
+  "main": "menu/index.html",
+  "node-remote": "<all_urls>",
+  "chromium-args": "--disable-web-security",
+  "window": {
+    "title": "游戏启动器",
+    "width": 1000,
+    "height": 700,
+    "position": "center",
+    "toolbar": false
+  }
+}

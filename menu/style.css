@@ -1,0 +1,234 @@
+body {
+    font-family: "Microsoft YaHei", sans-serif;
+    background: #121214; 
+    color: #fff;
+    padding: 20px;
+    margin: 0;
+}
+
+/* 全局全屏背景双层容器 */
+#global-bg-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+    pointer-events: none;
+    background-color: #121214;
+}
+
+/* 背景图层共有样式 */
+.bg-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: contain;
+    background-position: center center;
+    background-repeat: no-repeat;
+    opacity: 0;
+    will-change: opacity; /* 硬件加速，防止交叉淡入淡出时掉帧 */
+}
+
+h1 {
+    text-align: center;
+    color: #4fc3f7;
+    margin-bottom: 30px;
+    position: relative;
+    z-index: 2;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+#game-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 160px); 
+    gap: 20px;
+    max-width: 1000px;
+    margin: 0 auto;
+    justify-content: center;
+    position: relative;
+    z-index: 2;
+}
+
+.game-card {
+    background: rgba(42, 42, 53, 0.8); 
+    border: 2px solid rgba(63, 63, 79, 0.9);
+    border-radius: 12px;
+    padding: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    
+    width: 160px;
+    height: 150px;
+    box-sizing: border-box;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    backdrop-filter: blur(2px); 
+    -webkit-backdrop-filter: blur(2px);
+}
+
+.game-card:hover {
+    transform: translateY(-5px);
+    border-color: #4fc3f7;
+    box-shadow: 0 8px 20px rgba(79, 195, 247, 0.4);
+    background: rgba(50, 50, 66, 0.9); 
+}
+
+.game-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    object-fit: contain;
+    background: rgba(255, 255, 255, 0.05); 
+}
+
+.game-name {
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    word-break: break-all;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.3;
+}
+
+#no-games {
+    text-align: center;
+    color: #888;
+    grid-column: 1 / -1;
+}
+
+/* 自定义右键菜单 */
+.context-menu {
+    position: fixed;
+    background: rgba(30, 30, 38, 0.95);
+    border: 1px solid #4fc3f7;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    border-radius: 6px;
+    padding: 5px 0;
+    min-width: 130px;
+    z-index: 1000;
+    backdrop-filter: blur(5px);
+}
+.context-menu-item {
+    padding: 8px 16px;
+    font-size: 13px;
+    color: #ddd;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.context-menu-item:hover {
+    background: rgba(79, 195, 247, 0.2);
+    color: #4fc3f7;
+}
+
+/* 存档编辑模态弹窗 */
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex; justify-content: center; align-items: center;
+    z-index: 2000;
+}
+.modal-window {
+    background: #1e1e24;
+    border: 2px solid #3f3f4f;
+    border-radius: 12px;
+    width: 700px;
+    max-height: 80vh;
+    display: flex; flex-direction: column;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+}
+.modal-header {
+    padding: 15px; border-bottom: 1px solid #3f3f4f;
+    display: flex; justify-content: space-between; align-items: center;
+}
+.modal-header h3 { margin: 0; color: #4fc3f7; }
+.close-btn { cursor: pointer; color: #aaa; font-size: 20px; }
+.close-btn:hover { color: #fff; }
+
+.modal-body {
+    padding: 20px; overflow-y: auto; flex: 1;
+    display: flex; gap: 20px;
+}
+/* 存档文件列表 */
+.save-file-list {
+    width: 180px; border-right: 1px solid #3f3f4f;
+    display: flex; flex-direction: column; gap: 8px; padding-right: 15px;
+}
+.save-item-btn {
+    background: rgba(255,255,255,0.05); border: 1px solid #3f3f4f;
+    color: #fff; padding: 10px; border-radius: 6px; cursor: pointer; text-align: left;
+}
+.save-item-btn.active, .save-item-btn:hover {
+    border-color: #4fc3f7; background: rgba(79,195,247,0.1);
+}
+/* 编辑表单 */
+.save-edit-form { flex: 1; display: flex; flex-direction: column; gap: 15px; }
+.form-group { display: flex; flex-direction: column; gap: 5px; }
+.form-group label { font-size: 12px; color: #888; }
+.form-group input {
+    background: #121214; border: 1px solid #3f3f4f; color: #fff;
+    padding: 8px; border-radius: 6px; outline: none;
+}
+.form-group input:focus { border-color: #4fc3f7; }
+
+.modal-footer {
+    padding: 15px; border-top: 1px solid #3f3f4f;
+    display: flex; justify-content: flex-end; gap: 10px;
+}
+.btn {
+    padding: 8px 20px; border-radius: 6px; cursor: pointer; border: none; font-weight: bold;
+}
+.btn-primary { background: #4fc3f7; color: #121214; }
+.btn-primary:hover { background: #29b6f6; }
+.btn-secondary { background: #3f3f4f; color: #fff; }
+
+/* 解密进度条 */
+/* 全屏半透明遮罩 */
+.decrypt-progress-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    background: rgba(10, 10, 14, 0.85);
+    display: flex; justify-content: center; align-items: center;
+    z-index: 9999;
+    backdrop-filter: blur(8px);
+}
+/* 核心进度条盒子 */
+.decrypt-progress-box {
+    background: #1e1e24;
+    border: 2px solid #4fc3f7;
+    border-radius: 12px;
+    width: 450px; padding: 25px;
+    box-shadow: 0 0 25px rgba(79, 195, 247, 0.3);
+    text-align: center;
+}
+.decrypt-progress-title {
+    font-size: 16px; font-weight: bold; color: #4fc3f7; margin-bottom: 15px;
+}
+/* 图形进度条槽体 */
+.decrypt-progress-bar-bg {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid #3f3f4f;
+    border-radius: 20px; height: 16px; overflow: hidden; margin-bottom: 12px;
+}
+/* 动态伸缩的发光图形进度条 */
+.decrypt-progress-bar-fill {
+    background: linear-gradient(90deg, #29b6f6, #4fc3f7);
+    width: 0%; height: 100%; 
+    transition: width 0.1s ease-out; /* 顺滑的长度过渡动画 */
+    box-shadow: 0 0 10px rgba(79, 195, 247, 0.6);
+}
+.decrypt-progress-text {
+    font-size: 13px; color: #aaa;
+}
