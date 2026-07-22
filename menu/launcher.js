@@ -40,4 +40,16 @@ function scanGames() {
     }
 }
 
+window.loadGameList = function() {
+    scanGames();
+};
+
+window.addEventListener('keydown', function(e) {
+    if (e.key === 'F5') {
+        e.preventDefault(); // 阻止 NW.js 默认刷新整个页面的动作
+        console.log("[刷新器] 侦测到 F5，正在刷新游戏列表...");
+        scanGames();
+    }
+});
+
 scanGames();

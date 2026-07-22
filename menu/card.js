@@ -72,6 +72,7 @@ function createGameCard(gameFolderName, gamePath) {
     card.className = 'game-card';
     card.dataset.gamePath = gamePath;
     card.dataset.gameName = gameFolderName;
+    card.title = gameFolderName;
 
     // 调用解密器模块获取精准的背景图
     const bgSrc = getTrueGameBackgroundImage(gamePath);
