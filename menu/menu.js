@@ -4,7 +4,6 @@ const { exec } = require('child_process');
 const { superDecryptImage } = require('./imageDecoder.js');
 
 let rightClickedGamePath = null;
-let rightClickedGameName = null;
 
 // 【核心状态锁】：标识当前是否正有解密任务在运行
 let isDecrypting = false; 
@@ -128,7 +127,7 @@ function startImageDecryption(gamePath) {
 // ==========================================
 // 功能二：解密完整游戏到新文件夹 (包含全部代码与资产，无缝游玩)
 // ==========================================
-function startFullGameDecryption(gamePath, gameName) {
+function startFullGameDecryption(gamePath) {
     if (isDecrypting) return;
 
     // 定义全新的解密输出根目录 (原名加 -解密)
@@ -344,7 +343,7 @@ const decryptFullGameItem = new nwGui.MenuItem({
     label: '解密完整游戏 (还原原始资产)',
     click: () => {
         if (!rightClickedGamePath) return;
-        startFullGameDecryption(rightClickedGamePath, rightClickedGameName);
+        startFullGameDecryption(rightClickedGamePath);
     }
 });
 nativeMenu.append(decryptFullGameItem);
@@ -368,7 +367,6 @@ document.getElementById('game-list').addEventListener('contextmenu', (e) => {
     e.preventDefault();
 
     rightClickedGamePath = card.dataset.gamePath;
-    rightClickedGameName = card.dataset.gameName;
 
     if (isDecrypting) {
         decryptImgItem.enabled = false;
@@ -382,3 +380,9 @@ document.getElementById('game-list').addEventListener('contextmenu', (e) => {
 
     nativeMenu.popup(e.clientX, e.clientY);
 }, false);
+// 屏蔽默认右键菜单：只有「游戏卡片」上保留（由上面的原生菜单接管）
+document.addEventListener('contextmenu', (e) => {
+    if (!e.target.closest || !e.target.closest('.game-card')) {
+        e.preventDefault();
+    }
+}, true);

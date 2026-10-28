@@ -1,19 +1,23 @@
 const GAMES_DIR = nodePath.join(process.cwd(), 'games');
 const gameListContainer = document.getElementById('game-list');
 
+/**
+ * 启动游戏：不做整页跳转，把游戏挂到菜单页内的 iframe 中，
+ * 这样菜单页（以及注入器）能一直活着。
+ */
 function launchGame(gamePath) {
     const saveDirPath = nodePath.resolve(gamePath, 'save');
     if (!nodeFs.existsSync(saveDirPath)) {
         nodeFs.mkdirSync(saveDirPath);
     }
+
+    // 让游戏内的 require / 相对路径以游戏目录为准，与直接启动该游戏保持一致
     process.chdir(gamePath);
     process.mainModule.filename = nodePath.resolve(gamePath, 'index.html');
     process.execPath = nodePath.resolve(gamePath, 'nw.exe');
-    injectFsInterceptor(window, saveDirPath);
 
-    const indexHtmlPath = 'file:///' + nodePath.resolve(gamePath, 'index.html').replace(/\\/g, '/');
-    console.log("[启动器] 正在当前窗口直接加载游戏: " + indexHtmlPath);
-    window.location.href = indexHtmlPath;
+    patchProcessExit(window);
+    mountGameFrame(gamePath);
 }
 
 function scanGames() {
@@ -40,11 +44,11 @@ function scanGames() {
     }
 }
 
-window.loadGameList = function() {
+window.loadGameList = function () {
     scanGames();
 };
 
-window.addEventListener('keydown', function(e) {
+window.addEventListener('keydown', function (e) {
     if (e.key === 'F5') {
         e.preventDefault(); // 阻止 NW.js 默认刷新整个页面的动作
         console.log("[刷新器] 侦测到 F5，正在刷新游戏列表...");
